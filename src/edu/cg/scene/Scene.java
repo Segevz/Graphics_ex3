@@ -17,6 +17,7 @@ import edu.cg.algebra.Vec;
 import edu.cg.scene.camera.PinholeCamera;
 import edu.cg.scene.lightSources.Light;
 import edu.cg.scene.objects.Surface;
+import org.w3c.dom.css.RGBColor;
 
 public class Scene {
 	private String name = "scene";
@@ -185,5 +186,16 @@ public class Scene {
 		// TODO: Implement this method.
 		//       This is the recursive method in RayTracing.
 		throw new UnimplementedMethodException("calcColor");
+		if (recusionLevel > this.maxRecursionLevel){
+			return new Vec();
+		}
+		RGBColor color = this.calcEmissionColor() + this.calcAmbientColor();
+		for (int i = 0; i < this.getNumLights(); i++) {
+			Light light = this.getLight(j);
+			color += calcDiffuseColor();
+		}
+	}
+
+	private RGBColor calcEmissionColor() {
 	}
 }
