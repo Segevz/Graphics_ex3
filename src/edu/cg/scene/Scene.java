@@ -189,13 +189,34 @@ public class Scene {
 		if (recusionLevel > this.maxRecursionLevel){
 			return new Vec();
 		}
-		RGBColor color = this.calcEmissionColor() + this.calcAmbientColor();
+		Vec color = calcEmissionColor().add(calcAmbientColor());
 		for (int i = 0; i < this.getNumLights(); i++) {
-			Light light = this.getLight(j);
-			color += calcDiffuseColor();
+			Light light = this.getLight(i);
+			color = color.add(calcDiffuseColor()).add(calcSpecularColor());
 		}
 	}
 
-	private RGBColor calcEmissionColor() {
+	private Vec calcSpecularColor() {
+		return null;
+	}
+
+	private Vec calcDiffuseColor() {
+		return null;
+	}
+
+	private Light getLight(int index){
+		return null;
+	}
+
+	private int getNumLights() {
+
+	}
+
+	private Vec calcAmbientColor() {
+		return null;
+	}
+
+	private Vec calcEmissionColor() {
+		return null;
 	}
 }
