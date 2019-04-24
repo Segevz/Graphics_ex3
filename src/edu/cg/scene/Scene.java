@@ -25,6 +25,7 @@ public class Scene {
 	private int antiAliasingFactor = 1; //gets the values of 1, 2 and 3
 	private boolean renderRefractions = false;
 	private boolean renderReflections = false;
+	private int recursionLevel;
 	
 	private PinholeCamera camera;
 	private Vec ambient = new Vec(1, 1, 1); //white
@@ -182,18 +183,30 @@ public class Scene {
 		});
 	}
 	
-	private Vec calcColor(Ray ray, int recusionLevel) {
+	private Vec calcColor(Ray ray, int recursionLevel) {
 		// TODO: Implement this method.
 		//       This is the recursive method in RayTracing.
-		throw new UnimplementedMethodException("calcColor");
-		if (recusionLevel > this.maxRecursionLevel){
-			return new Vec();
-		}
+
+		//throw new UnimplementedMethodException("calcColor");
+		
+		// Emission and Ambient calculations
 		Vec color = calcEmissionColor().add(calcAmbientColor());
+		
+		// Diffuse and Specular calculations
 		for (int i = 0; i < this.getNumLights(); i++) {
 			Light light = this.getLight(i);
 			color = color.add(calcDiffuseColor()).add(calcSpecularColor());
 		}
+		
+		recursionLevel++;
+		if (recursionLevel > this.maxRecursionLevel){
+			return color;
+		}
+
+		// Reflective and Refractive calculations 
+		//Ray r_ray = ConstructReflectiveRay - make constructors in Ray?
+		
+		return color;
 	}
 
 	private Vec calcSpecularColor() {
