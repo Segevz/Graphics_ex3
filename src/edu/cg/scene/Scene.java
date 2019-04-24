@@ -10,14 +10,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import edu.cg.Logger;
-import edu.cg.UnimplementedMethodException;
+import edu.cg.algebra.Hit;
 import edu.cg.algebra.Point;
 import edu.cg.algebra.Ray;
 import edu.cg.algebra.Vec;
 import edu.cg.scene.camera.PinholeCamera;
 import edu.cg.scene.lightSources.Light;
 import edu.cg.scene.objects.Surface;
-import org.w3c.dom.css.RGBColor;
 
 public class Scene {
 	private String name = "scene";
@@ -188,25 +187,45 @@ public class Scene {
 		//       This is the recursive method in RayTracing.
 
 		//throw new UnimplementedMethodException("calcColor");
-		
+		if (recursionLevel >= this.maxRecursionLevel){
+			return new Vec();
+		}
+		//get minimum hit
+		Hit minHit = this.findMinHit(ray);
+		if (minHit == null)
+			return this.backgroundColor;
+		Point hitPoint = ray.getHittingPoint(minHit);
+		Surface hitSurface = minHit.getSurface();
 		// Emission and Ambient calculations
 		Vec color = calcEmissionColor().add(calcAmbientColor());
-		
+
 		// Diffuse and Specular calculations
 		for (int i = 0; i < this.getNumLights(); i++) {
 			Light light = this.getLight(i);
 			color = color.add(calcDiffuseColor()).add(calcSpecularColor());
 		}
 		
-		recursionLevel++;
-		if (recursionLevel > this.maxRecursionLevel){
-			return color;
-		}
 
-		// Reflective and Refractive calculations 
+		// Reflective and Refractive calculations
 		//Ray r_ray = ConstructReflectiveRay - make constructors in Ray?
-		
+		if (this.renderReflections){
+
+		}
+		if (this.renderRefractions){
+
+		}
 		return color;
+	}
+
+	private Hit findMinHit(Ray ray) {
+		Hit minHit = null;
+		for (Surface surface : this.surfaces){
+			Hit currentHit = surface.intersect(ray);
+			if (minHit == null || (currentHit != null && minHit.compareTo(currentHit) < 0)){
+				minHit = currentHit;
+			}
+		}
+		return minHit;
 	}
 
 	private Vec calcSpecularColor() {
