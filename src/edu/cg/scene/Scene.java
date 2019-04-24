@@ -23,7 +23,7 @@ public class Scene {
 	private String name = "scene";
 	private int maxRecursionLevel = 1;
 	private int antiAliasingFactor = 1; //gets the values of 1, 2 and 3
-	private boolean renderRefarctions = false;
+	private boolean renderRefractions = false;
 	private boolean renderReflections = false;
 	
 	private PinholeCamera camera;
@@ -75,7 +75,7 @@ public class Scene {
 	}
 	
 	public Scene initRenderRefarctions(boolean renderRefarctions) {
-		this.renderRefarctions = renderRefarctions;
+		this.renderRefractions = renderRefarctions;
 		return this;
 	}
 	
@@ -97,8 +97,8 @@ public class Scene {
 		return maxRecursionLevel;
 	}
 	
-	public boolean getRenderRefarctions() {
-		return renderRefarctions;
+	public boolean getRenderRefractions() {
+		return renderRefractions;
 	}
 	
 	public boolean getRenderReflections() {
@@ -145,7 +145,7 @@ public class Scene {
 		Future<Color>[][] futures = (Future<Color>[][])(new Future[imgHeight][imgWidth]);
 		
 		this.logger.log("Starting to shoot " +
-			(imgHeight*imgWidth*antiAliasingFactor*antiAliasingFactor) +
+			(imgHeight * imgWidth * antiAliasingFactor * antiAliasingFactor) +
 			" rays over " + name);
 		
 		for(int y = 0; y < imgHeight; ++y)
@@ -209,7 +209,7 @@ public class Scene {
 	}
 
 	private int getNumLights() {
-
+		return lightSources.size();
 	}
 
 	private Vec calcAmbientColor() {
