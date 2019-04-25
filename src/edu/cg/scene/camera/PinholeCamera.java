@@ -27,7 +27,7 @@ public class PinholeCamera {
 		this.cameraPosition = cameraPosition; 
 		this.towardsVec = towardsVec.normalize();
 		this.upVec = upVec.normalize();
-		this.center = new Ray(cameraPosition, towardsVec).add(distanceToPlain);
+		this.center = new Ray(cameraPosition, this.towardsVec).add(this.distanceToPlain);
 		this.distanceToPlain = distanceToPlain;
 		this.rightVec = upVec.cross(towardsVec).normalize();
 

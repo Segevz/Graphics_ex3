@@ -180,9 +180,6 @@ public class Scene {
 	}
 	
 	private Vec calcColor(Ray ray, int recursionLevel) {
-		// TODO: Implement this method.
-		//       This is the recursive method in RayTracing.
-
 		if (recursionLevel >= this.maxRecursionLevel){
 			return new Vec();
 		}
@@ -196,15 +193,6 @@ public class Scene {
 		Vec color = calcAmbientColor(hitSurface);
 
 		// Diffuse and Specular calculations
-		for (int i = 0; i < this.getNumLights(); i++) {
-			Light light = this.getLight(i);
-			color = color.add(calcDiffuseColor()).add(calcSpecularColor());
-		}
-		
-
-		// Reflective and Refractive calculations
-		if (this.renderReflections){
-
 		for (Light light : this.lightSources) {
 			Ray rayToLight = light.rayToLight(hitPoint);
 			if (!this.isOccluded(light, rayToLight)) {
@@ -263,10 +251,6 @@ public class Scene {
 		Vec N = hit.getNormalToSurface();
 		Vec L = ray.direction();
 		return hit.getSurface().Kd().mult(Math.max(N.dot(L),0));
-	}
-
-	private Light getLight(int index){
-		return null;
 	}
 
 	private int getNumLights() {
