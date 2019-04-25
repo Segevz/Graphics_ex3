@@ -58,11 +58,17 @@ public class PointLight extends Light {
 	    	return sourceOfRay.distSqr(this.position) > sourceOfRay.distSqr(rayToLight.getHittingPoint(hit));
 	}
 
+	/**
+	 * Returns the light intensity at the specified point.
+	 * @param hittingPoint - The given point
+	 * @param rayToLight - A ray to the light source (this is relevant for point-light and spotlight)
+	 * @return A vector representing the light intensity which decreases in intensity (the r,g and b channels). 
+	 */
     @Override
     public Vec intensity(Point hittingPoint, Ray rayToLight) {
-        double dist = hittingPoint.dist(this.position);
-        double decay = this.kc + (this.kl + this.kq * dist) * dist;
-        return this.intensity.mult(1.0 / decay);
+        double distance = hittingPoint.dist(this.position);
+        // Calculates and returns decrease in intensity 
+        return this.intensity.mult(1.0 / (this.kc + this.kl * distance + this.kq * Math.pow(distance,2)));
     }
 
 	public PointLight initPosition(Point position) {
