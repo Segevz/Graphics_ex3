@@ -2,9 +2,30 @@
   "name": "scene1",
   "maxRecursionLevel": 3,
   "antiAliasingFactor": 1,
-  "renderRefarctions": true,
+  "renderRefractions": true,
   "renderReflections": true,
-  "camera": {},
+  "recursionLevel": 0,
+  "camera": {
+    "cameraPosition": {
+      "x": 0.0,
+      "y": 6.0,
+      "z": 1.0
+    },
+    "towardsVec": {
+      "x": 0.0,
+      "y": -0.8,
+      "z": -0.2
+    },
+    "upVec": {
+      "x": 0.0,
+      "y": -0.5,
+      "z": 0.5
+    },
+    "distanceToPlain": 2.0,
+    "Ry": 200,
+    "Rx": 200,
+    "viewPlainWidth": 2.0
+  },
   "ambient": {
     "x": 0.0,
     "y": 0.0,

@@ -14,6 +14,10 @@ public class Hit implements Comparable<Hit> {
 		this.normalToSurface = normalToSurface;
 	}
 
+	public boolean isOnTransperentSurface(){
+		return this.surface.isTransparent();
+	}
+
 	public Vec getNormalToSurface() {
 		return normalToSurface;
 	}
