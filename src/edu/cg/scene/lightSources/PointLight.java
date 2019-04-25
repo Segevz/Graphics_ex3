@@ -1,5 +1,6 @@
 package edu.cg.scene.lightSources;
 
+import edu.cg.algebra.Hit;
 import edu.cg.algebra.Point;
 import edu.cg.algebra.Ray;
 import edu.cg.algebra.Vec;
@@ -33,19 +34,36 @@ public class PointLight extends Light {
 
 	@Override
 	public Ray rayToLight(Point fromPoint) {
-		return null;
+		return new Ray(fromPoint, this.position);
 	}
 
+	/**
+	 * Checks if the given surface occludes the light-source. The surface occludes the light source
+	 * if the given ray first intersects the surface before reaching the light source.
+	 * @param surface -The given surface
+	 * @param rayToLight - the ray to the light source
+	 * @return true if the ray is occluded by the surface and the surface is between
+	 * object and light source
+	 */
 	@Override
 	public boolean isOccludedBy(Surface surface, Ray rayToLight) {
-		// If surface intersects with ray return true otherwise false
-		return surface.intersect(rayToLight) != null;
+		// If surface does not intersect with ray return false
+		Hit hit = surface.intersect(rayToLight);
+	    if (hit == null) {
+	    	return false;
+	    }
+	    // Otherwise, the surface intersects with the ray, if the intersection is closer to
+	    // object than the light source then return true, otherwise false
+	    Point sourceOfRay = rayToLight.source();
+	    	return sourceOfRay.distSqr(this.position) > sourceOfRay.distSqr(rayToLight.getHittingPoint(hit));
 	}
 
-	@Override
-	public Vec intensity(Point hittingPoint, Ray rayToLight) {
-		return null;
-	}
+    @Override
+    public Vec intensity(Point hittingPoint, Ray rayToLight) {
+        double dist = hittingPoint.dist(this.position);
+        double decay = this.kc + (this.kl + this.kq * dist) * dist;
+        return this.intensity.mult(1.0 / decay);
+    }
 
 	public PointLight initPosition(Point position) {
 		this.position = position;
@@ -58,6 +76,4 @@ public class PointLight extends Light {
 		this.kc = kc;
 		return this;
 	}
-
-	//TODO: add some methods
 }
