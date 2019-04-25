@@ -22,7 +22,7 @@ public class Ray {
 	}
 	
 	public Point add(double t) {
-		// returns: p0 + t*direction
+		// returns: p0 + t * direction
 		return source.add(t, direction);
 	}
 	

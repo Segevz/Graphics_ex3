@@ -196,6 +196,15 @@ public class Scene {
 		Vec color = calcAmbientColor(hitSurface);
 
 		// Diffuse and Specular calculations
+		for (int i = 0; i < this.getNumLights(); i++) {
+			Light light = this.getLight(i);
+			color = color.add(calcDiffuseColor()).add(calcSpecularColor());
+		}
+		
+
+		// Reflective and Refractive calculations
+		if (this.renderReflections){
+
 		for (Light light : this.lightSources) {
 			Ray rayToLight = light.rayToLight(hitPoint);
 			if (!this.isOccluded(light, rayToLight)) {
