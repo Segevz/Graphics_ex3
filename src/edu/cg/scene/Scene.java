@@ -207,7 +207,6 @@ public class Scene {
 		
 
 		// Reflective and Refractive calculations
-		//Ray r_ray = ConstructReflectiveRay - make constructors in Ray?
 		if (this.renderReflections){
 
 		}

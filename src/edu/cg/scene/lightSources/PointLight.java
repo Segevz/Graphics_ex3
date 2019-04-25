@@ -38,7 +38,8 @@ public class PointLight extends Light {
 
 	@Override
 	public boolean isOccludedBy(Surface surface, Ray rayToLight) {
-		return false;
+		// If surface intersects with ray return true otherwise false
+		return surface.intersect(rayToLight) != null;
 	}
 
 	@Override

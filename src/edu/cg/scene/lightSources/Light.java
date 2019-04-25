@@ -22,7 +22,7 @@ public abstract class Light {
 	/**
 	 * Constructs a ray originated from the given point to the light.
 	 * @param fromPoint - The initial point of the ray
-	 * @return a ray origniated from 'fromPoint' to the light source.
+	 * @return a ray originated from 'fromPoint' to the light source.
 	 */
 	public abstract Ray rayToLight(Point fromPoint);
 	
@@ -31,7 +31,7 @@ public abstract class Light {
 	 * if the given ray first intersects the surface before reaching the light source.
 	 * @param surface -The given surface
 	 * @param rayToLight - the ray to the light source
-	 * @return true if the ray is occluded by the surface..
+	 * @return true if the ray is occluded by the surface.
 	 */
 	public abstract boolean isOccludedBy(Surface surface, Ray rayToLight);
 	
