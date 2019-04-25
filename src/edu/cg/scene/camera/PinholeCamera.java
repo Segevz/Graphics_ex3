@@ -27,9 +27,9 @@ public class PinholeCamera {
 		this.cameraPosition = cameraPosition; 
 		this.towardsVec = towardsVec.normalize();
 		this.upVec = upVec.normalize();
-		this.center = new Ray(cameraPosition, this.towardsVec).add(this.distanceToPlain);
 		this.distanceToPlain = distanceToPlain;
 		this.rightVec = upVec.cross(towardsVec).normalize();
+		this.center = new Ray(cameraPosition, this.towardsVec).add(this.distanceToPlain);
 
 		// Initialize with default image width
 		this.viewPlainWidth = 2;
@@ -44,11 +44,11 @@ public class PinholeCamera {
 	 * @param viewPlainWidth - the width of the image plain in world coordinates.
 	 */
 	public void initResolution(int height, int width, double viewPlainWidth) {
-		
 		this.Ry = height;
 		this.Rx = width;
 		this.viewPlainWidth = viewPlainWidth;
-		
+		this.center = new Ray(cameraPosition, this.towardsVec).add(this.distanceToPlain);
+
 	}
 
 	/**
