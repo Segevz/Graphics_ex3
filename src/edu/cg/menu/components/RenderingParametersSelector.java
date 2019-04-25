@@ -189,7 +189,7 @@ public class RenderingParametersSelector extends JPanel {
 		}
 		
 		recursionLevel.setValue(scene.getMaxRecursionLevel());
-		refraction.setState(scene.getRenderRefarctions());
+		refraction.setState(scene.getRenderRefractions());
 		reflection.setState(scene.getRenderReflections());
 	}
 }
