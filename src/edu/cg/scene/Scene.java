@@ -21,7 +21,6 @@ public class Scene {
 	private int antiAliasingFactor = 1; //gets the values of 1, 2 and 3
 	private boolean renderRefractions = false;
 	private boolean renderReflections = false;
-	private int recursionLevel;
 	
 	private PinholeCamera camera;
 	private Vec ambient = new Vec(1, 1, 1); //white
@@ -119,14 +118,11 @@ public class Scene {
 	
 	private void initSomeFields(int imgWidth, int imgHeight, Logger logger) {
 		this.logger = logger;
-		//TODO: initialize your additional field here.
-		//      You can also change the method signature if needed.
 	}
 	
 	
 	public BufferedImage render(int imgWidth, int imgHeight, double viewPlainWidth,Logger logger)
 			throws InterruptedException, ExecutionException {
-		// TODO: Please notice the following comment.
 		// This method is invoked each time Render Scene button is invoked.
 		// Use it to initialize additional fields you need.
 		initSomeFields(imgWidth, imgHeight, logger);
@@ -150,7 +146,7 @@ public class Scene {
 				futures[y][x] = calcColor(x, y);
 		
 		this.logger.log("Done shooting rays.");
-		this.logger.log("Wating for results...");
+		this.logger.log("Waiting for results...");
 		
 		for(int y = 0; y < imgHeight; ++y)
 			for(int x = 0; x < imgWidth; ++x) {
@@ -180,26 +176,29 @@ public class Scene {
 	}
 	
 	private Vec calcColor(Ray ray, int recursionLevel) {
+		// Halt condition
 		if (recursionLevel >= this.maxRecursionLevel){
 			return new Vec();
 		}
-		//get minimum hit
+		// Find minimum hit
 		Hit minHit = this.findMinHit(ray);
+		// If there are no intersections, return background color
 		if (minHit == null)
 			return this.backgroundColor;
+		
 		Point hitPoint = ray.getHittingPoint(minHit);
 		Surface hitSurface = minHit.getSurface();
-		// Emission and Ambient calculations
+		// Ambient calculations
 		Vec color = calcAmbientColor(hitSurface);
 
-		// Diffuse and Specular calculations
+		// Iterate over light sources and calculate diffuse and specular coefficients
 		for (Light light : this.lightSources) {
 			Ray rayToLight = light.rayToLight(hitPoint);
-			if (!this.isOccluded(light, rayToLight)) {
+			if (!this.isOccluded(light, rayToLight)) { 
 				Vec intensity = light.intensity(hitPoint, rayToLight);
 				color = color.add((calcDiffuseColor(minHit, rayToLight)).add(calcSpecularColor(minHit, rayToLight, ray.direction())).mult(intensity));
 
-				// Reflective and Refractive calculations
+				// Reflective and refractive calculations
 				if (this.renderReflections) {
 					Vec reflectionColor = calcReflection(ray, recursionLevel + 1, minHit);
 					color = color.add(reflectionColor);
@@ -228,7 +227,14 @@ public class Scene {
 		return (this.calcColor(new Ray(ray.getHittingPoint(hit), direction), recursionLevel)).mult(intensity);
 	}
 
+	/**
+	 * Finds the closest intersection between ray and a surface
+	 * Closest meaning distance between surface and image is smallest
+	 * @param ray - the ray from a pixel
+	 * @return minimum hit/intersection
+	 */
 	private Hit findMinHit(Ray ray) {
+		// If there are no hits return null
 		Hit minHit = null;
 		for (Surface surface : this.surfaces){
 			Hit currentHit = surface.intersect(ray);
@@ -237,6 +243,21 @@ public class Scene {
 			}
 		}
 		return minHit;
+	}
+	
+	/**
+	 * Checks if the given ray is occluded by any surface 
+	 * before reaching the light source
+	 * @param light -The light source
+	 * @param ray - the ray to the light source
+	 * @return true if the ray is occluded by any surface.
+	 */
+	private boolean isOccluded(Light light, Ray ray) {
+		for (Surface surface : this.surfaces) {
+			if (light.isOccludedBy(surface, ray))
+				return true;
+		}
+		return false;
 	}
 
 	private Vec calcSpecularColor(Hit hit, Ray rayToLight, Vec V) {
@@ -253,20 +274,7 @@ public class Scene {
 		return hit.getSurface().Kd().mult(Math.max(N.dot(L),0));
 	}
 
-
-	private boolean isOccluded(Light light, Ray ray) {
-		for (Surface surface : this.surfaces) {
-			if (light.isOccludedBy(surface, ray))
-				return true;
-		}
-		return false;
-	}
-
 	private Vec calcAmbientColor(Surface surface) {
 		return surface.Ka().mult(this.ambient);
-	}
-
-	private Vec calcEmissionColor() {
-		return null;
 	}
 }
