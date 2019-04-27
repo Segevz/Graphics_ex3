@@ -261,10 +261,10 @@ public class Scene {
 	}
 
 	private Vec calcSpecularColor(Hit hit, Ray rayToLight, Vec V) {
-		Vec N = hit.getNormalToSurface().normalize();
-		Vec L = rayToLight.direction().neg().normalize();
-		Vec Lreflected = Ops.reflect(L.neg(), N);
-		double cosTheta = Lreflected.dot(V.neg());
+		Vec N = hit.getNormalToSurface();
+		Vec L = rayToLight.direction();
+		Vec Lreflected = Ops.reflect(L, N).normalize();
+		double cosTheta = Lreflected.dot(V.normalize().neg());
 		return cosTheta <= 0 ? new Vec() : hit.getSurface().Ks().mult(Math.pow(cosTheta, hit.getSurface().shininess()));
 	}
 

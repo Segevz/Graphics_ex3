@@ -69,41 +69,36 @@ public class AxisAlignedBox extends Shape {
 
 	@Override
 	public Hit intersect(Ray ray) {
-		// TODO You need to implement this method. 
-		// See documentation in Intersectable.java base class. 
-//		throw new UnimplementedMethodException("intersect");
-		Vec xzNormal = new Vec(0, 1, 0);
-		Vec xyNormal = new Vec(0, 0, 1);
-		Vec yzNormal = new Vec(1, 0, 0);
-
-		Plain xzMin = new Plain(xzNormal, minPoint);
-		Plain xyMin = new Plain(xyNormal, minPoint);
-		Plain yzMin = new Plain(yzNormal, minPoint);
-		Plain xyMax = new Plain(xyNormal, maxPoint);
-		Plain xzMax = new Plain(xzNormal, maxPoint);
-		Plain yzMax = new Plain(yzNormal, maxPoint);
+		// TODO You need to implement this method.
+		// See documentation in Intersectable.java base class.
+		Plain[] plains = createPlains();
 		Hit minHit = null;
-
-		minHit = getHit(ray, xyMin, minHit);
-		minHit = getHit(ray, xzMin, minHit);
-		minHit = getHit(ray, yzMin, minHit);
-		minHit = getHit(ray, xyMax, minHit);
-		minHit = getHit(ray, xzMax, minHit);
-		minHit = getHit(ray, yzMax, minHit);
-		return minHit;
-	}
-
-	private Hit getHit(Ray ray, Plain plain, Hit minHit) {
 		Hit currentHit;
-		if ((currentHit = plain.intersect(ray)) != null && isInBox(ray.getHittingPoint(currentHit))){
-			if (minHit != null){
-				if (ray.source().distSqr(ray.getHittingPoint(minHit)) > ray.source().distSqr(ray.getHittingPoint(currentHit))){
+		Point source = ray.source();
+		for (Plain plain : plains) {
+			if ((currentHit = plain.intersect(ray)) != null && isInBox(ray.getHittingPoint(currentHit))) {
+				if (minHit != null) {
+					if (source.distSqr(ray.getHittingPoint(minHit)) > source.distSqr(ray.getHittingPoint(currentHit))) {
+						minHit = currentHit;
+					}
+				} else {
 					minHit = currentHit;
 				}
-			}else {
-				minHit = currentHit;
 			}
 		}
 		return minHit;
+		}
+
+	private Plain[] createPlains() {
+		Vec[] normals = new Vec[3];
+		normals[0] = new Vec(0, 1, 0);
+		normals[1] = new Vec(0, 0, 1);
+		normals[2] = new Vec(1, 0, 0);
+		Plain[] plains = new Plain[6];
+		for (int i = 0; i < 3; i++) {
+			plains[i] = new Plain(normals[i], minPoint);
+			plains[i+3] = new Plain(normals[i], maxPoint);
+		}
+		return plains;
 	}
 }
