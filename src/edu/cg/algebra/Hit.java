@@ -14,7 +14,7 @@ public class Hit implements Comparable<Hit> {
 		this.normalToSurface = normalToSurface;
 	}
 
-	public boolean isOnTransperentSurface(){
+	public boolean isOnTransparentSurface(){
 		return this.surface.isTransparent();
 	}
 

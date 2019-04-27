@@ -204,7 +204,7 @@ public class Scene {
 					color = color.add(reflectionColor);
 				}
 				if (this.renderRefractions) {
-					if (minHit.isOnTransperentSurface()) {
+					if (minHit.isOnTransparentSurface()) {
 						Vec refractionColor = calcRefraction(ray, recursionLevel + 1, minHit);
 						color = color.add(refractionColor);
 					}
