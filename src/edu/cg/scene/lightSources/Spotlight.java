@@ -59,11 +59,7 @@ public class Spotlight extends PointLight {
 	 */
     @Override
     public Vec intensity(Point hittingPoint, Ray rayToLight) {
-
-        Vec D = this.direction.normalize().neg(); // central direction vector 
-        if (D.dot(rayToLight.direction()) < 1.0E-5) {
-            return new Vec(0.0);
-        }
+        Vec D = this.direction.normalize().neg();
         return super.intensity(hittingPoint, rayToLight).mult(D.dot(rayToLight.direction()));
     }
 }
