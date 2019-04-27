@@ -74,11 +74,10 @@ public class AxisAlignedBox extends Shape {
 		Plain[] plains = createPlains();
 		Hit minHit = null;
 		Hit currentHit;
-		Point source = ray.source();
 		for (Plain plain : plains) {
 			if ((currentHit = plain.intersect(ray)) != null && isInBox(ray.getHittingPoint(currentHit))) {
 				if (minHit != null) {
-					if (source.distSqr(ray.getHittingPoint(minHit)) > source.distSqr(ray.getHittingPoint(currentHit))) {
+					if (minHit.compareTo(currentHit) > 0) {
 						minHit = currentHit;
 					}
 				} else {

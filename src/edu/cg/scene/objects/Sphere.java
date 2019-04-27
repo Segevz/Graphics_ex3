@@ -1,10 +1,6 @@
 package edu.cg.scene.objects;
 
-import edu.cg.UnimplementedMethodException;
-import edu.cg.algebra.Hit;
-import edu.cg.algebra.Ops;
-import edu.cg.algebra.Point;
-import edu.cg.algebra.Ray;
+import edu.cg.algebra.*;
 
 public class Sphere extends Shape {
 	private Point center;
@@ -37,9 +33,19 @@ public class Sphere extends Shape {
 
 	@Override
 	public Hit intersect(Ray ray) {
-		// TODO: implement this method.
-		throw new UnimplementedMethodException("intersect(Ray)");
-//		if (Ops.dist(this.center, ray) < this.radius){?
-//		}
+		double b = ray.direction().dot(ray.source().sub(this.center));
+		double discriminant = Math.sqrt(Math.pow(b, 2) - (ray.source().distSqr(this.center) - (radius * radius)));
+		double minT;
+		Vec normal;
+		if (Double.isNaN(discriminant) || -b + discriminant < Ops.epsilon){
+			return null;
+		}else if (-b - discriminant > 0){
+			minT = -b - discriminant;
+			normal = ray.add(minT).sub(this.center).normalize().neg();
+		}else {
+			minT = -b +discriminant;
+			normal = ray.add(minT).sub(this.center).normalize();
+		}
+		return new Hit(minT, normal);
 	}
 }
