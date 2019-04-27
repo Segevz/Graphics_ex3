@@ -238,7 +238,7 @@ public class Scene {
 		Hit minHit = null;
 		for (Surface surface : this.surfaces){
 			Hit currentHit = surface.intersect(ray);
-			if (minHit == null || (currentHit != null && minHit.compareTo(currentHit) < 0)){
+			if (minHit == null || (currentHit != null && minHit.compareTo(currentHit) > 0)){
 				minHit = currentHit;
 			}
 		}
