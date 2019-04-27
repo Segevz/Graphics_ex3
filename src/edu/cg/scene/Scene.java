@@ -21,7 +21,6 @@ public class Scene {
 	private int antiAliasingFactor = 1; //gets the values of 1, 2 and 3
 	private boolean renderRefractions = false;
 	private boolean renderReflections = false;
-	private int recursionLevel;
 	
 	private PinholeCamera camera;
 	private Vec ambient = new Vec(1, 1, 1); //white
@@ -183,19 +182,21 @@ public class Scene {
 		if (recursionLevel >= this.maxRecursionLevel){
 			return new Vec();
 		}
-		//get minimum hit
+		// Find minimum hit
 		Hit minHit = this.findMinHit(ray);
+		// If there are no intersections, return background color
 		if (minHit == null)
 			return this.backgroundColor;
+		
 		Point hitPoint = ray.getHittingPoint(minHit);
 		Surface hitSurface = minHit.getSurface();
-		// Emission and Ambient calculations
+		// Ambient calculations
 		Vec color = calcAmbientColor(hitSurface);
 
-		// Diffuse and Specular calculations
+		// Iterate over light sources and calculate Diffuse and Specular coefficients
 		for (Light light : this.lightSources) {
 			Ray rayToLight = light.rayToLight(hitPoint);
-			if (!this.isOccluded(light, rayToLight)) {
+			if (!this.isOccluded(light, rayToLight)) { 
 				Vec intensity = light.intensity(hitPoint, rayToLight);
 				color = color.add(intensity.mult(calcDiffuseColor(minHit, rayToLight)).add(calcSpecularColor(minHit, rayToLight, ray.direction())));
 
@@ -253,10 +254,6 @@ public class Scene {
 		return hit.getSurface().Kd().mult(Math.max(N.dot(L),0));
 	}
 
-	private int getNumLights() {
-		return lightSources.size();
-	}
-
 	private boolean isOccluded(Light light, Ray ray) {
 		for (Surface surface : this.surfaces) {
 			if (light.isOccludedBy(surface, ray))
@@ -267,9 +264,5 @@ public class Scene {
 
 	private Vec calcAmbientColor(Surface surface) {
 		return surface.Ka().mult(this.ambient);
-	}
-
-	private Vec calcEmissionColor() {
-		return null;
 	}
 }
