@@ -4,6 +4,7 @@ import edu.cg.UnimplementedMethodException;
 import edu.cg.algebra.Hit;
 import edu.cg.algebra.Point;
 import edu.cg.algebra.Ray;
+import edu.cg.algebra.Vec;
 
 public class AxisAlignedBox extends Shape {
 	private Point minPoint;
@@ -59,13 +60,94 @@ public class AxisAlignedBox extends Shape {
 		fixBoundryPoints();
 		return this;
 	}
+	public boolean isInBox(Point p){
+		return isSmallerThen(minPoint, p) && isSmallerThen(p, maxPoint);
+	}
+	private boolean isSmallerThen(Point p1, Point p2){
+		return p1.x < p2.x && p1.y < p2.y && p1.z < p2.z;
+	}
 
 	@Override
 	public Hit intersect(Ray ray) {
 		// TODO You need to implement this method. 
 		// See documentation in Intersectable.java base class. 
-		throw new UnimplementedMethodException("intersect");
-	}
+//		throw new UnimplementedMethodException("intersect");
+		Vec xzNormal = new Vec(0, 1.0, 0);
+		Vec xyNormal = new Vec(0, 0, 1.0);
+		Vec yzNormal = new Vec(1.0, 0, 0);
 
-	
+		Plain xzMin = new Plain(xzNormal, minPoint);
+		Plain xyMin = new Plain(xyNormal, minPoint);
+		Plain yzMin = new Plain(yzNormal, minPoint);
+		Plain xyMax = new Plain(xyNormal, maxPoint);
+		Plain xzMax = new Plain(xzNormal, maxPoint);
+		Plain yzMax = new Plain(yzNormal, maxPoint);
+		Hit minHit = null;
+		Hit currentHit;
+
+		if ((currentHit = xyMin.intersect(ray)) != null){
+			if (minHit != null){
+				if (isInBox(ray.getHittingPoint(currentHit)) && ray.source().dist(ray.getHittingPoint(minHit)) > ray.source().dist(ray.getHittingPoint(currentHit))){
+					minHit = currentHit;
+				}
+			}else {
+				minHit = currentHit;
+			}
+		}
+		if ((currentHit = xzMin.intersect(ray)) != null){
+			if (minHit != null){
+				if (isInBox(ray.getHittingPoint(currentHit)) && ray.source().dist(ray.getHittingPoint(minHit)) > ray.source().dist(ray.getHittingPoint(currentHit))){
+					minHit = currentHit;
+				}
+			}else {
+				minHit = currentHit;
+			}
+		}
+		if ((currentHit = yzMin.intersect(ray)) != null){
+			if (minHit != null){
+				if (isInBox(ray.getHittingPoint(currentHit)) && ray.source().dist(ray.getHittingPoint(minHit)) > ray.source().dist(ray.getHittingPoint(currentHit))){
+					minHit = currentHit;
+				}
+			}else {
+				minHit = currentHit;
+			}
+		}
+		if ((currentHit = xyMax.intersect(ray)) != null){
+			if (minHit != null){
+				if (isInBox(ray.getHittingPoint(currentHit)) && ray.source().dist(ray.getHittingPoint(minHit)) > ray.source().dist(ray.getHittingPoint(currentHit))){
+					minHit = currentHit;
+				}
+			}else {
+				minHit = currentHit;
+			}
+		}
+		if ((currentHit = xzMax.intersect(ray)) != null){
+			if (minHit != null){
+				if (isInBox(ray.getHittingPoint(currentHit)) && ray.source().dist(ray.getHittingPoint(minHit)) > ray.source().dist(ray.getHittingPoint(currentHit))){
+					minHit = currentHit;
+				}
+			}else {
+				minHit = currentHit;
+			}
+		}
+		if ((currentHit = yzMax.intersect(ray)) != null){
+			if (minHit != null){
+				if (isInBox(ray.getHittingPoint(currentHit)) && ray.source().dist(ray.getHittingPoint(minHit)) > ray.source().dist(ray.getHittingPoint(currentHit))){
+					minHit = currentHit;
+				}
+			}else {
+				minHit = currentHit;
+			}
+		}
+		if ((currentHit = xzMin.intersect(ray)) != null){
+			if (minHit != null){
+				if (isInBox(ray.getHittingPoint(currentHit)) && ray.source().dist(ray.getHittingPoint(minHit)) > ray.source().dist(ray.getHittingPoint(currentHit))){
+					minHit = currentHit;
+				}
+			}else {
+				minHit = currentHit;
+			}
+		}
+		return minHit;
+	}
 }

@@ -28,7 +28,7 @@ public class Scene {
 	private Vec backgroundColor = new Vec(0, 0.5, 1); //blue sky
 	private List<Light> lightSources = new LinkedList<>();
 	private List<Surface> surfaces = new LinkedList<>();
-	
+
 	
 	//MARK: initializers
 	public Scene initCamera(Point eyePoistion, Vec towardsVec, Vec upVec,  double distanceToPlain) {
@@ -197,7 +197,7 @@ public class Scene {
 			Ray rayToLight = light.rayToLight(hitPoint);
 			if (!this.isOccluded(light, rayToLight)) {
 				Vec intensity = light.intensity(hitPoint, rayToLight);
-				color = color.add(intensity.mult(calcDiffuseColor(minHit, rayToLight)).add(calcSpecularColor(minHit, rayToLight, ray.direction())));
+				color = color.add((calcDiffuseColor(minHit, rayToLight)).add(calcSpecularColor(minHit, rayToLight, ray.direction())).mult(intensity));
 
 				// Reflective and Refractive calculations
 				if (this.renderReflections) {
@@ -219,13 +219,13 @@ public class Scene {
 		Surface surface = hit.getSurface();
 		Vec direction = Ops.refract(ray.direction(), hit.getNormalToSurface(), surface.n1(hit), surface.n2(hit));
 		Vec intensity = new Vec(surface.refractionIntensity());
-		return intensity.mult(this.calcColor(new Ray(ray.getHittingPoint(hit), direction), recursionLevel + 1));
+		return (this.calcColor(new Ray(ray.getHittingPoint(hit), direction), recursionLevel + 1)).mult(intensity);
 	}
 
 	private Vec calcReflection(Ray ray, int recursionLevel, Hit hit) {
 		Vec direction = Ops.reflect(ray.direction(), hit.getNormalToSurface());
 		Vec intensity = new Vec(hit.getSurface().reflectionIntensity());
-		return intensity.mult(this.calcColor(new Ray(ray.getHittingPoint(hit), direction), recursionLevel));
+		return (this.calcColor(new Ray(ray.getHittingPoint(hit), direction), recursionLevel)).mult(intensity);
 	}
 
 	private Hit findMinHit(Ray ray) {
@@ -240,11 +240,11 @@ public class Scene {
 	}
 
 	private Vec calcSpecularColor(Hit hit, Ray rayToLight, Vec V) {
-		Vec N = hit.getNormalToSurface();
-		Vec L = rayToLight.direction();
+		Vec N = hit.getNormalToSurface().normalize();
+		Vec L = rayToLight.direction().neg().normalize();
 		Vec Lreflected = Ops.reflect(L.neg(), N);
 		double cosTheta = Lreflected.dot(V.neg());
-		return cosTheta < 0.0 ? new Vec() : hit.getSurface().Ks().mult(Math.pow(cosTheta, hit.getSurface().shininess()));
+		return cosTheta <= 0 ? new Vec() : hit.getSurface().Ks().mult(Math.pow(cosTheta, hit.getSurface().shininess()));
 	}
 
 	private Vec calcDiffuseColor(Hit hit, Ray ray){
@@ -253,9 +253,6 @@ public class Scene {
 		return hit.getSurface().Kd().mult(Math.max(N.dot(L),0));
 	}
 
-	private int getNumLights() {
-		return lightSources.size();
-	}
 
 	private boolean isOccluded(Light light, Ray ray) {
 		for (Surface surface : this.surfaces) {

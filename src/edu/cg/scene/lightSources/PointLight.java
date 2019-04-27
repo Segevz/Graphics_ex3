@@ -68,7 +68,7 @@ public class PointLight extends Light {
     public Vec intensity(Point hittingPoint, Ray rayToLight) {
         double distance = hittingPoint.dist(this.position);
         // Calculates and returns decrease in intensity 
-        return this.intensity.mult(1.0 / (this.kc + this.kl * distance + this.kq * Math.pow(distance,2)));
+        return this.intensity.mult(1.0 / (this.kc + (this.kl * distance) + (this.kq * distance * distance)));
     }
 
 	public PointLight initPosition(Point position) {

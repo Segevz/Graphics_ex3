@@ -2,6 +2,7 @@ package edu.cg.scene.objects;
 
 import edu.cg.UnimplementedMethodException;
 import edu.cg.algebra.Hit;
+import edu.cg.algebra.Ops;
 import edu.cg.algebra.Point;
 import edu.cg.algebra.Ray;
 
@@ -38,5 +39,7 @@ public class Sphere extends Shape {
 	public Hit intersect(Ray ray) {
 		// TODO: implement this method.
 		throw new UnimplementedMethodException("intersect(Ray)");
+//		if (Ops.dist(this.center, ray) < this.radius){?
+//		}
 	}
 }

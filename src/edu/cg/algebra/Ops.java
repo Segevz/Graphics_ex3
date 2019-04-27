@@ -5,7 +5,7 @@ package edu.cg.algebra;
 public class Ops {
 	public static final double epsilon = 1e-5;
 	public static final double infinity = 1e8;
-	
+
 	public static double dot(Vec u, Vec v) {
 		return u.x*v.x + u.y*v.y + u.z*v.z;
 	}
@@ -49,6 +49,15 @@ public class Ops {
 	public static double dist(Point p1, Point p2) {
 		return length(sub(p1, p2));
 	}
+
+	public static double distSqr(Point p, Ray r) {
+		Vec pToSource = r.source().sub(p);
+		return norm(sub(pToSource, r.direction().mult(pToSource.dot(r.direction()))));
+	}
+
+	public static double dist(Point p, Ray r) {
+		return Math.sqrt(distSqr(p, r));
+	}
 	
 	public static double distSqr(Point p1, Point p2) {
 		return lengthSqr(sub(p1, p2));
@@ -65,7 +74,11 @@ public class Ops {
 	public static Vec add(Vec u, Vec v) {
 		return new Vec(u.x+v.x, u.y+v.y, u.z+v.z);
 	}
-	
+
+	public static Vec sub(Vec u, Vec v) {
+		return new Vec(u.x-v.x, u.y-v.y, u.z-v.z);
+	}
+
 	public static Point add(Point p, Vec v) {
 		return new Point(p.x+v.x, p.y+v.y, p.z+v.z);
 	}

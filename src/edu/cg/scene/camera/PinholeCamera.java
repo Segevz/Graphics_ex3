@@ -47,8 +47,7 @@ public class PinholeCamera {
 		this.Ry = height;
 		this.Rx = width;
 		this.viewPlainWidth = viewPlainWidth;
-		this.center = new Ray(cameraPosition, this.towardsVec).add(this.distanceToPlain);
-
+//		this.center = new Ray(cameraPosition, this.towardsVec).add(this.distanceToPlain);
 	}
 
 	/**
@@ -58,8 +57,8 @@ public class PinholeCamera {
 	 * @return the middle point of the pixel (x,y) in the model coordinates.
 	 */
 	public Point transform(int x, int y) {
-		double upDistance = (double)((int)(this.Ry / 2.0) - y) * (this.viewPlainWidth / this.Rx);
-		double rightDistance = (double)(x - (int)(this.Rx / 2.0)) * (this.viewPlainWidth / this.Ry);
+		double upDistance = (double)(y - (this.Ry / 2)) * (this.viewPlainWidth / this.Ry) * -1;
+		double rightDistance = -(double)(x - (this.Rx / 2)) * (this.viewPlainWidth / this.Rx);
 		Point refrencePoint = this.center.add(this.upVec.mult(upDistance)).add(this.rightVec.mult(rightDistance));
 		return refrencePoint;
 	}
