@@ -4,7 +4,6 @@
   "antiAliasingFactor": 1,
   "renderRefractions": true,
   "renderReflections": true,
-  "recursionLevel": 0,
   "camera": {
     "cameraPosition": {
       "x": 4.0,
