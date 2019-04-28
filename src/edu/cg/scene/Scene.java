@@ -194,10 +194,11 @@ public class Scene {
 		// Iterate over light sources and calculate diffuse and specular coefficients
 		for (Light light : this.lightSources) {
 			Ray rayToLight = light.rayToLight(hitPoint);
-			if (!this.isOccluded(light, rayToLight)) { 
+			if (!this.isReachable(light, rayToLight)) {
 				Vec intensity = light.intensity(hitPoint, rayToLight);
 				color = color.add((calcDiffuseColor(minHit, rayToLight)).add(calcSpecularColor(minHit, rayToLight, ray.direction())).mult(intensity));
-
+			}
+		}
 				// Reflective and refractive calculations
 				if (this.renderReflections) {
 					Vec reflectionColor = calcReflection(ray, recursionLevel + 1, minHit);
@@ -209,8 +210,6 @@ public class Scene {
 						color = color.add(refractionColor);
 					}
 				}
-			}
-		}
 		return color;
 	}
 
@@ -229,7 +228,8 @@ public class Scene {
 
 	/**
 	 * Finds the closest intersection between ray and a surface
-	 * Closest meaning distance between surface and image is smallest
+	 * Closest meaning that the distance between the surface and
+	 * the ray's source point is the smallest
 	 * @param ray - the ray from a pixel
 	 * @return minimum hit/intersection
 	 */
@@ -252,7 +252,7 @@ public class Scene {
 	 * @param ray - the ray to the light source
 	 * @return true if the ray is occluded by any surface.
 	 */
-	private boolean isOccluded(Light light, Ray ray) {
+	private boolean isReachable(Light light, Ray ray) {
 		for (Surface surface : this.surfaces) {
 			if (light.isOccludedBy(surface, ray))
 				return true;
