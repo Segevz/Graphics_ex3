@@ -37,13 +37,13 @@ public class Sphere extends Shape {
 		double discriminant = Math.sqrt(Math.pow(b, 2) - (ray.source().distSqr(this.center) - (radius * radius)));
 		double minT;
 		Vec normal;
-		if (Double.isNaN(discriminant) || -b + discriminant < Ops.epsilon){
+		if (Double.isNaN(discriminant) || (-b + discriminant) < Ops.epsilon) {
 			return null;
-		}else if (-b - discriminant > 0){
+		} else if (-b - discriminant > 0) {
 			minT = -b - discriminant;
 			normal = ray.add(minT).sub(this.center).normalize().neg();
-		}else {
-			minT = -b +discriminant;
+		} else {
+			minT = -b + discriminant;
 			normal = ray.add(minT).sub(this.center).normalize();
 		}
 		return new Hit(minT, normal);

@@ -1,12 +1,10 @@
 package edu.cg.scene.camera;
 
-import edu.cg.UnimplementedMethodException;
 import edu.cg.algebra.Point;
 import edu.cg.algebra.Ray;
 import edu.cg.algebra.Vec;
 
 public class PinholeCamera {
-	//TODO Add your fields
 	private Point cameraPosition;
 	private Vec towardsVec, upVec, rightVec;
 	private double distanceToPlain;
@@ -15,7 +13,7 @@ public class PinholeCamera {
 	private double viewPlainWidth;
 	
 	/**
-	 * Initializes a pinhole camera model with default resolution 200X200 (RxXRy) and image width 2.
+	 * Initializes a pin-hole camera model with default resolution 200X200 (RxXRy) and image width 2.
 	 * @param cameraPosition - The position of the camera.
 	 * @param towardsVec - The towards vector of the camera (not necessarily normalized). (-z coordinate)
 	 * @param upVec - The up vector of the camera. (y coordinate)
@@ -57,7 +55,7 @@ public class PinholeCamera {
 	 * @return the middle point of the pixel (x,y) in the model coordinates.
 	 */
 	public Point transform(int x, int y) {
-		double upDistance = (double)(y - (this.Ry / 2)) * (this.viewPlainWidth / this.Ry) * -1;
+		double upDistance = (double)(y - (this.Ry / 2)) * (this.viewPlainWidth / this.Ry) * (-1);
 		double rightDistance = -(double)(x - (this.Rx / 2)) * (this.viewPlainWidth / this.Rx);
 		Point refrencePoint = this.center.add(this.upVec.mult(upDistance)).add(this.rightVec.mult(rightDistance));
 		return refrencePoint;

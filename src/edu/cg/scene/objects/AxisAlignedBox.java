@@ -1,6 +1,5 @@
 package edu.cg.scene.objects;
 
-import edu.cg.UnimplementedMethodException;
 import edu.cg.algebra.Hit;
 import edu.cg.algebra.Point;
 import edu.cg.algebra.Ray;
@@ -69,7 +68,6 @@ public class AxisAlignedBox extends Shape {
 
 	@Override
 	public Hit intersect(Ray ray) {
-		// TODO You need to implement this method.
 		// See documentation in Intersectable.java base class.
 		Plain[] plains = createPlains();
 		Hit minHit = null;
@@ -77,9 +75,8 @@ public class AxisAlignedBox extends Shape {
 		for (Plain plain : plains) {
 			if ((currentHit = plain.intersect(ray)) != null && isInBox(ray.getHittingPoint(currentHit))) {
 				if (minHit != null) {
-					if (minHit.compareTo(currentHit) > 0) {
+					if (minHit.compareTo(currentHit) > 0)
 						minHit = currentHit;
-					}
 				} else {
 					minHit = currentHit;
 				}

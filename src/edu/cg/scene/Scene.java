@@ -194,7 +194,7 @@ public class Scene {
 		// Iterate over light sources and calculate diffuse and specular coefficients
 		for (Light light : this.lightSources) {
 			Ray rayToLight = light.rayToLight(hitPoint);
-			if (!this.isReachable(light, rayToLight)) {
+			if (!this.isOccluded(light, rayToLight)) {
 				Vec intensity = light.intensity(hitPoint, rayToLight);
 				color = color.add((calcDiffuseColor(minHit, rayToLight)).add(calcSpecularColor(minHit, rayToLight, ray.direction())).mult(intensity));
 			}
@@ -252,7 +252,7 @@ public class Scene {
 	 * @param ray - the ray to the light source
 	 * @return true if the ray is occluded by any surface.
 	 */
-	private boolean isReachable(Light light, Ray ray) {
+	private boolean isOccluded(Light light, Ray ray) {
 		for (Surface surface : this.surfaces) {
 			if (light.isOccludedBy(surface, ray))
 				return true;
